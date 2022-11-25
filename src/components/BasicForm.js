@@ -1,5 +1,13 @@
 import useFormInput from '../hooks/use-form-input';
 
+const isNotEmpty = val => val.trim().length > 0;
+const isEmail = val =>
+    val
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
 const BasicForm = props => {
     const {
         value: firstValue,
@@ -9,7 +17,7 @@ const BasicForm = props => {
         blurHandler: firstBlurHandler,
         classes: firstClasses,
         reset: firstReset
-    } = useFormInput(val => val.trim().length > 0);
+    } = useFormInput(isNotEmpty);
 
     const {
         value: lastValue,
@@ -19,7 +27,7 @@ const BasicForm = props => {
         blurHandler: lastBlurHandler,
         classes: lastClasses,
         reset: lastReset
-    } = useFormInput(val => val.trim().length > 0);
+    } = useFormInput(isNotEmpty);
 
     const {
         value: emailValue,
@@ -29,17 +37,16 @@ const BasicForm = props => {
         blurHandler: emailBlurHandler,
         classes: emailClasses,
         reset: emailReset
-    } = useFormInput(val => val.trim().length > 2 && val.includes('@'));
+    } = useFormInput(isEmail);
 
     const formIsValid =
         firstIsValid && lastIsValid && emailIsValid ? true : false;
-
-    console.log(formIsValid);
 
     const submitHandler = e => {
         e.preventDefault();
         if (!formIsValid) return;
 
+        console.log('Form submitted!');
         firstReset();
         lastReset();
         emailReset();
